@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SteelRose Legal — Leave Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+:root{
+  --cr:#7A1530;--cr2:#8B1A2E;--cr3:#5C0F20;--cr4:#A01E38;--cr5:#3D0A17;
+  --cb:#F9EFE6;--cb2:#F3E5D5;--cw:#FFFFFF;--cof:#FAF7F4;--cof2:#F5F0EA;
+  --ct:#2C1A1A;--cm:#7A6060;--cbr:#DDD0C4;--cbr2:#C8B8A8;
+  --cg-bg:#EDF5EE;--cg:#1A6B35;--cw-bg:#FEF5E4;--cwc:#7A4F0A;
+  --cd-bg:#FCEAEA;--cdc:#8B1A1A;--ci-bg:#EAF0FB;--cic:#1A3A8B;
+  --cp-bg:#F7EFF8;--cpc:#6B1A7A;
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',sans-serif;
+  --sh:0 1px 3px rgba(92,15,32,.08),0 4px 12px rgba(92,15,32,.04);
+  --shm:0 4px 16px rgba(92,15,32,.12),0 1px 4px rgba(92,15,32,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--fb);background:var(--cof);color:var(--ct);font-size:14px;line-height:1.5}
+#root{height:100%}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--cof2)}::-webkit-scrollbar-thumb{background:var(--cbr2);border-radius:3px}
+
+/* ── LAYOUT ── */
+.shell{display:flex;height:100vh;overflow:hidden}
+.sb{width:240px;flex-shrink:0;background:var(--cr3);display:flex;flex-direction:column;overflow:hidden}
+.sb-logo{padding:1.3rem 1.2rem 1rem;border-bottom:1px solid rgba(249,239,230,.12);display:flex;align-items:center;gap:10px}
+.sb-badge{width:40px;height:40px;background:var(--cb);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-sr{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--cr3)}
+.sb-title h1{font-family:var(--fd);font-size:15px;font-weight:600;color:#fff;line-height:1.2}
+.sb-title p{font-size:11px;color:rgba(255,255,255,.38);margin-top:1px}
+.nav-sec{padding:.8rem 1.2rem 3px;font-size:10px;color:rgba(255,255,255,.28);letter-spacing:.1em;text-transform:uppercase}
+.nav{display:flex;align-items:center;gap:10px;padding:9px 1.2rem;font-size:13px;cursor:pointer;color:rgba(255,255,255,.58);border-left:3px solid transparent;transition:all .15s;user-select:none}
+.nav:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.07)}
+.nav.on{color:var(--cb);background:rgba(249,239,230,.14);border-left-color:var(--cb2)}
+.nav i{font-size:17px}
+.nbadge{margin-left:auto;background:var(--cr4);color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center}
+.sb-user{margin-top:auto;padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px}
+.sb-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:1.5px solid rgba(249,239,230,.3);flex-shrink:0}
+.sb-uname{font-size:12px;color:rgba(255,255,255,.8);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.sb-urole{font-size:10px;color:rgba(255,255,255,.35);text-transform:capitalize}
+.out-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);border-radius:6px;padding:5px 7px;cursor:pointer;font-size:13px;transition:all .15s;display:flex;align-items:center}
+.out-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--cw);border-bottom:1px solid var(--cbr);padding:.9rem 1.6rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-shrink:0;box-shadow:0 1px 3px rgba(92,15,32,.04)}
+.tb-title{font-family:var(--fd);font-size:20px;font-weight:600;color:var(--cr3)}
+.tb-right{display:flex;align-items:center;gap:10px}
+.ybadge{background:var(--cb);color:var(--cr3);border:1px solid var(--cr4);font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px}
+.role-bar{padding:6px 1.6rem;font-size:11px;font-weight:500;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--cbr)}
+.role-bar.emp{background:#FEF5E4;color:#7A4F0A}
+.role-bar.mgr{background:#EAF0FB;color:#1A3A8B}
+.role-bar.hr{background:var(--cg-bg);color:var(--cg)}
+.role-bar.admin{background:var(--cd-bg);color:var(--cdc)}
+.pg{flex:1;overflow-y:auto;padding:1.4rem 1.6rem}
+
+/* ── CARDS ── */
+.card{background:var(--cw);border-radius:12px;border:1px solid var(--cbr);overflow:hidden;margin-bottom:1rem;box-shadow:var(--sh)}
+.ch{padding:.8rem 1.3rem;border-bottom:1px solid var(--cbr);display:flex;justify-content:space-between;align-items:center}
+.ch h3{font-size:11px;font-weight:500;color:var(--cr3);text-transform:uppercase;letter-spacing:.06em}
+.chd{background:var(--cr3);padding:.8rem 1.3rem;border-bottom:1px solid var(--cr5);display:flex;justify-content:space-between;align-items:center}
+.chd h3{font-size:11px;font-weight:500;color:var(--cb);text-transform:uppercase;letter-spacing:.06em}
+
+/* ── STATS ── */
+.sg4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1.2rem}
+.sg2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.sc{background:var(--cw);border-radius:12px;padding:1.1rem 1.2rem;border:1px solid var(--cbr);box-shadow:var(--sh)}
+.sc.dk{background:var(--cr3);border-color:var(--cr5)}
+.slbl{font-size:10px;color:var(--cm);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;font-weight:500}
+.sc.dk .slbl{color:rgba(255,255,255,.4)}
+.sval{font-family:var(--fd);font-size:28px;font-weight:600;color:var(--cr3);line-height:1}
+.sc.dk .sval{color:var(--cb)}
+.ssub{font-size:11px;color:var(--cm);margin-top:3px}
+.sc.dk .ssub{color:rgba(255,255,255,.35)}
+
+/* ── BAL GRID ── */
+.bg4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:1.1rem}
+.bg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:1rem}
+.bc{border-radius:8px;padding:12px;text-align:center}
+.blbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.bval{font-family:var(--fd);font-size:28px;font-weight:600;line-height:1}
+.bsub{font-size:10px;margin-top:2px;opacity:.7}
+.bbar{height:4px;border-radius:2px;background:rgba(0,0,0,.12);margin-top:7px;overflow:hidden}
+.bbar-f{height:100%;border-radius:2px}
+
+/* ── TABLE ── */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--cof2);padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--cm);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #EDE5DA;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--cb)}
+.tdn{display:flex;align-items:center;gap:8px;white-space:nowrap}
+
+/* ── BADGES ── */
+.bdg{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500;white-space:nowrap;line-height:1.6}
+.bp{background:var(--cw-bg);color:var(--cwc)}.ba{background:var(--cg-bg);color:var(--cg)}.brej{background:var(--cd-bg);color:var(--cdc)}.bty{background:var(--ci-bg);color:var(--cic)}.bcf{background:var(--cp-bg);color:var(--cpc)}
+.bra{background:var(--cr4);color:#fff;font-size:10px}.brh{background:var(--ci-bg);color:var(--cic);font-size:10px}.brm{background:var(--cb);color:var(--cr3);border:1px solid var(--cbr);font-size:10px}.bre{background:var(--cof2);color:var(--cm);font-size:10px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:12px;font-weight:500;border-radius:8px;cursor:pointer;border:1px solid var(--cbr);background:var(--cw);color:var(--ct);transition:all .15s;white-space:nowrap;font-family:var(--fb);line-height:1}
+.btn:hover{border-color:var(--cr);color:var(--cr)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-cr{background:var(--cr);color:#fff;border-color:var(--cr)}.btn-cr:hover{background:var(--cr2);color:#fff;border-color:var(--cr2)}
+.btn-dk{background:var(--cr3);color:#fff;border-color:var(--cr3)}.btn-dk:hover{background:var(--cr5);color:#fff}
+.btn-app{background:var(--cg-bg);color:var(--cg);border-color:#B2DCC4}.btn-app:hover{background:#d4eedb}
+.btn-rej{background:var(--cd-bg);color:var(--cdc);border-color:#F5C0C0}.btn-rej:hover{background:#f9d5d5}
+.btn-sm{padding:4px 9px;font-size:11px}
+
+/* ── FORMS ── */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1.3rem}
+.fgf{grid-column:1/-1}
+.flbl{font-size:10px;color:var(--cm);font-weight:600;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:5px}
+.fi,.fs,.fta{font-size:13px;padding:8px 11px;border-radius:8px;border:1px solid var(--cbr);background:var(--cw);color:var(--ct);width:100%;font-family:var(--fb);transition:border-color .15s}
+.fi:focus,.fs:focus,.fta:focus{outline:none;border-color:var(--cr);box-shadow:0 0 0 3px rgba(122,21,48,.08)}
+.fta{resize:vertical;min-height:80px}
+.fac{padding:0 1.3rem 1.3rem;display:flex;gap:8px;justify-content:flex-end}
+
+/* ── ALERTS ── */
+.al{padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:10px;display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+.al i{font-size:15px;flex-shrink:0;margin-top:1px}
+.al-w{background:var(--cw-bg);color:var(--cwc);border:1px solid #F5D9A0}
+.al-ok{background:var(--cg-bg);color:var(--cg);border:1px solid #B2DCC4}
+.al-e{background:var(--cd-bg);color:var(--cdc);border:1px solid #F5C0C0}
+.al-i{background:var(--ci-bg);color:var(--cic);border:1px solid #B5CFF5}
+.al-cf{background:var(--cp-bg);color:var(--cpc);border:1px solid #D9B5E0}
+
+/* ── AV ── */
+.av{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.av-lg{width:42px;height:42px;font-size:13px}
+
+/* ── POLICY ROW ── */
+.pr{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #EDE5DA;font-size:13px}
+.pr:last-child{border-bottom:none}
+.pr span:first-child{color:var(--cm)}.pr span:last-child{font-weight:500;color:var(--cr3);text-align:right;max-width:55%}
+
+/* ── CAL ── */
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:1rem}
+.cdn{font-size:10px;color:var(--cm);text-align:center;padding:4px 0;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.cd{font-size:12px;text-align:center;padding:7px 3px;border-radius:6px;min-height:30px;display:flex;align-items:center;justify-content:center;font-weight:500}
+.cd.ap{background:var(--cg-bg);color:var(--cg)}.cd.pn{background:var(--cw-bg);color:var(--cwc)}.cd.td{background:var(--cr);color:#fff;border-radius:50%}.cd.om{color:#C8BEB4;font-weight:400}
+
+/* ── NOTIF ── */
+.ni{display:flex;gap:11px;padding:12px 1.3rem;border-bottom:1px solid #EDE5DA;align-items:flex-start}
+.ni:last-child{border-bottom:none}.ni.unr{background:var(--cb)}
+.ndot{width:8px;height:8px;background:var(--cr);border-radius:50%;flex-shrink:0;margin-top:5px}
+
+/* ── APPROVAL CARD ── */
+.apc{border:1px solid var(--cbr);border-radius:12px;overflow:hidden;margin-bottom:.9rem;box-shadow:var(--sh)}
+.apb{padding:1rem 1.3rem;background:var(--cw);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.apm{background:var(--cof2);border-top:1px solid var(--cbr);padding:7px 1.3rem;display:flex;gap:18px;font-size:11px;color:var(--cm);flex-wrap:wrap}
+.apm strong{color:var(--cr3)}
+
+/* ── DEPT CHIP ── */
+.dc{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;background:var(--cof2);padding:3px;border-radius:8px;border:1px solid var(--cbr)}
+.tab{padding:5px 13px;font-size:12px;border-radius:7px;cursor:pointer;color:var(--cm);font-weight:500;transition:all .15s}
+.tab.on{background:var(--cr3);color:var(--cb)}
+.tcnt{background:var(--cr4);color:#fff;font-size:10px;border-radius:10px;padding:0 5px;margin-left:3px}
+
+/* ── MODAL ── */
+.mo{position:fixed;inset:0;background:rgba(60,10,23,.55);display:flex;align-items:center;justify-content:center;z-index:999;padding:1.5rem}
+.mb{background:var(--cw);border-radius:16px;border:1px solid var(--cbr);width:520px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shm)}
+.mh{background:var(--cr3);padding:1rem 1.3rem;display:flex;justify-content:space-between;align-items:center;border-radius:16px 16px 0 0}
+.mh h3{font-family:var(--fd);font-size:16px;font-weight:600;color:#fff}
+.mc{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:6px;padding:5px 8px;cursor:pointer;font-size:14px;display:flex;align-items:center}
+.mc:hover{background:rgba(255,255,255,.28)}
+.mbd{padding:1.3rem}.mf{padding:0 1.3rem 1.3rem;display:flex;gap:8px}
+
+/* ── LOGIN / REGISTER ── */
+.auth-page{height:100vh;background:var(--cb);display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.auth-card{background:var(--cw);border-radius:16px;border:1px solid var(--cbr);width:460px;overflow:hidden;box-shadow:var(--shm)}
+.auth-hdr{background:var(--cr3);padding:1.8rem;text-align:center}
+.auth-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px}
+.auth-lb{width:48px;height:48px;background:var(--cb);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.auth-sr{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--cr3)}
+.auth-hdr h1{font-family:var(--fd);font-size:20px;font-weight:600;color:#fff}
+.auth-hdr p{font-size:12px;color:rgba(255,255,255,.45);margin-top:2px}
+.auth-body{padding:1.5rem}
+.auth-tabs{display:flex;gap:2px;background:var(--cof2);padding:3px;border-radius:8px;border:1px solid var(--cbr);margin-bottom:1.2rem}
+.at{flex:1;padding:7px;font-size:12px;border-radius:7px;cursor:pointer;color:var(--cm);font-weight:500;text-align:center;transition:all .15s}
+.at.on{background:var(--cr3);color:var(--cb)}
+.auth-link{font-size:12px;color:var(--cr);text-decoration:underline;cursor:pointer;margin-top:8px;display:inline-block}
+
+/* ── SETUP STEPS ── */
+.ss{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #EDE5DA;align-items:flex-start}
+.ss:last-child{border-bottom:none}
+.sn{width:30px;height:30px;background:var(--cr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.ss h4{font-size:13px;font-weight:600;color:var(--cr3);margin-bottom:4px}
+.ss p{font-size:12px;color:var(--cm);line-height:1.65}
+
+/* ── ACCESS DENIED ── */
+.adn{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--cm)}
+.adn i{font-size:48px;color:var(--cbr2)}.adn h3{font-size:16px;color:var(--cr3);font-weight:500}.adn p{font-size:13px;max-width:340px;text-align:center;line-height:1.6}
+
+/* ── LOADING ── */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;background:var(--cb)}
+.spin{width:40px;height:40px;border:3px solid var(--cb2);border-top-color:var(--cr);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── SETUP BANNER ── */
+.setup-banner{background:var(--cr3);color:var(--cb);padding:.6rem 1.6rem;font-size:12px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+
+/* ── EMPTY ── */
+.emp{padding:2.5rem;text-align:center;color:var(--cm)}
+.emp i{font-size:36px;color:var(--cbr2);display:block;margin-bottom:10px}
+.emp p{font-size:13px}
+
+@media(max-width:900px){
+  .sb{width:200px}.sg2{grid-template-columns:1fr}.sg4{grid-template-columns:repeat(2,1fr)}.bg4{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div id="root">
+  <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#F9EFE6;gap:16px;font-family:Georgia,serif">
+    <div style="font-size:32px;font-weight:700;color:#5C0F20">S|R</div>
+    <div style="font-size:16px;color:#5C0F20;font-weight:500">Steelrose Legal</div>
+    <div style="width:40px;height:40px;border:3px solid #F3E5D5;border-top-color:#7A1530;border-radius:50%;animation:spin .8s linear infinite"></div>
+    <div style="font-size:13px;color:#7A6060;font-family:sans-serif">Loading leave management system...</div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+/* ══════════════════════════════════════════════════
+   ⚙️  CONFIGURATION — EDIT THESE TWO LINES
+   Get these from your Supabase project dashboard
+══════════════════════════════════════════════════ */
+const SUPABASE_URL = 'https://mpmrvvbqtchcpajywofq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wbXJ2dmJxdGNoY3Bhanl3b2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MDEyMjIsImV4cCI6MjA5NDI3NzIyMn0.122mnLc_1RkawjsvRI3x9vonDsg2MyRxjBWUJNBqK2I';
+const EMAILJS_SVC  = 'YOUR_EMAILJS_SERVICE_ID';
+const EMAILJS_TPL  = 'YOUR_EMAILJS_TEMPLATE_ID';
+const EMAILJS_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
+/* ══════════════════════════════════════════════════ */
+
+const NOT_CONFIGURED = false; // configured
+
+/* ── constants ── */
+const TODAY        = new Date().toISOString().split('T')[0];
+const YR_START     = '2026-04-01';
+const CARRY_EXPIRY = '2026-06-30';
+const CLIO         = 'STE.STEELR.00133.2023';
+const AL=20, SL=5, BH=8, CF_MAX=5;
+
+const DEPT_STYLES = {
+  'Corporate':           {bg:'#F7EFF8',tc:'#6B1F7A'},
+  'Gaming - Tech & Commercial': {bg:'#EAF0FA',tc:'#1B3A8B'},
+  'Compliance':          {bg:'#EAF2EA',tc:'#1E6B3A'},
+  'Finance':             {bg:'#FEF5E4',tc:'#7A4F0A'},
+  'Marketing':           {bg:'#FCEAEA',tc:'#8B1A1A'},
+};
+const DEPTS = Object.keys(DEPT_STYLES);
+const ROLES = ['employee','manager','hr','admin'];
+const LEAVE_TYPES = ['Annual Leave','Sick Leave','Emergency Leave','Maternity Leave','Paternity Leave','Bereavement Leave','Study Leave','Bank Holiday'];
+
+/* ── supabase client ── */
+const sb = NOT_CONFIGURED ? null : supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ── helpers ── */
+const daysLeft = () => Math.round((new Date(CARRY_EXPIRY)-new Date(TODAY))/86400000);
+const dBetween = (a,b) => Math.max(1,Math.round((new Date(b)-new Date(a))/86400000)+1);
+const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const avatarColors = ['#B5D4F4','#C0DD97','#F5C4B3','#FAC775','#F4C0D1','#CECBF6','#9FE1CB'];
+const avatarTc     = ['#0C447C','#27500A','#712B13','#633806','#72243E','#3C3489','#085041'];
+const hashColor = n => { let h=0;for(let c of n)h=(h*31+c.charCodeAt(0))%avatarColors.length; return {bg:avatarColors[h],tc:avatarTc[h]}; };
+
+/* ── access control ── */
+function visibleLeaves(me, leaves, allUsers) {
+  if(!me) return [];
+  if(me.role==='admin'||me.role==='hr') return leaves;
+  if(me.role==='manager'){
+    const teamIds = allUsers.filter(u=>u.manager_id===me.id).map(u=>u.id);
+    return leaves.filter(l => l.user_id===me.id || teamIds.includes(l.user_id));
+  }
+  return leaves.filter(l => l.user_id===me.id);
+}
+function visibleUsers(me, all) {
+  if(!me) return [];
+  if(me.role==='admin'||me.role==='hr') return all;
+  if(me.role==='manager') return all.filter(u=>u.manager_id===me.id||u.id===me.id);
+  return all.filter(u=>u.id===me.id);
+}
+
+/* ── email ── */
+async function sendEmail(toEmail, toName, subject, message) {
+  if(!EMAILJS_SVC||EMAILJS_SVC==='YOUR_EMAILJS_SERVICE_ID') return;
+  try {
+    await fetch('https://api.emailjs.com/api/v1.0/email/send',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({service_id:EMAILJS_SVC,template_id:EMAILJS_TPL,user_id:EMAILJS_KEY,
+        template_params:{to_email:toEmail,to_name:toName,subject,message,from_name:'SteelRose Leave System'}})
+    });
+  } catch(e){}
+}
+
+/* ══════════════════════════════════════════════════
+   SMALL COMPONENTS
+══════════════════════════════════════════════════ */
+function Av({name,size}){
+  const {bg,tc}=hashColor(name||'?');
+  const sz=size==='lg'?{width:42,height:42,fontSize:13}:{width:30,height:30,fontSize:11};
+  return <div className="av" style={{...sz,background:bg,color:tc}}>{initials(name||'?')}</div>;
+}
+function SBadge({s}){ const m={pending:'bp',approved:'ba',rejected:'brej'}; return <span className={`bdg ${m[s]||'bty'}`}>{s}</span>; }
+function DC({dept}){ const d=DEPT_STYLES[dept]||{bg:'#F0EDE6',tc:'#5A5050'}; return <span className="dc" style={{background:d.bg,color:d.tc}}>{dept}</span>; }
+function RB({role}){ return <span className={`bdg br${role?.[0]||'e'}`}>{role}</span>; }
+function TBadge({type,carry}){ return carry?<span className="bdg bcf">Carry-fwd</span>:<span className="bdg bty" style={{fontSize:10}}>{type?.replace(' Leave','')}</span>; }
+function Empty({icon,text}){ return <div className="emp"><i className={`ti ${icon}`}/><p>{text}</p></div>; }
+function AccessDenied(){ return <div className="adn"><i className="ti ti-lock"/><h3>Access Restricted</h3><p>You don't have permission to view this section.</p></div>; }
+
+/* ══════════════════════════════════════════════════
+   SETUP CONFIG PAGE (shown before supabase configured)
+══════════════════════════════════════════════════ */
+function SetupConfig() {
+  return (
+    <div style={{height:'100vh',background:'var(--cb)',display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
+      <div style={{background:'var(--cw)',borderRadius:16,border:'1px solid var(--cbr)',width:640,boxShadow:'var(--shm)',overflow:'hidden'}}>
+        <div style={{background:'var(--cr3)',padding:'1.8rem',textAlign:'center'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,marginBottom:8}}>
+            <div style={{width:48,height:48,background:'var(--cb)',borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <span style={{fontFamily:'var(--fd)',fontSize:20,fontWeight:700,color:'var(--cr3)'}}>S|R</span>
+            </div>
+            <div style={{textAlign:'left'}}><h1 style={{fontFamily:'var(--fd)',fontSize:20,fontWeight:600,color:'#fff'}}>Steelrose Legal Ltd</h1><p style={{fontSize:12,color:'rgba(255,255,255,.45)'}}>Leave Management — Production Setup</p></div>
+          </div>
+        </div>
+        <div style={{padding:'1.5rem'}}>
+          <div className="al al-w" style={{marginBottom:'1.2rem'}}>
+            <i className="ti ti-alert-triangle"/>
+            <div><strong>Configuration needed:</strong> You need to connect this app to your Supabase database. This takes about 10 minutes and is completely free.</div>
+          </div>
+          <div style={{marginBottom:'1.2rem'}}>
+            {[
+              {n:1,title:'Create a free Supabase account',body:<>Go to <a href="https://supabase.com" target="_blank" style={{color:'var(--cr)'}}>supabase.com</a> → click "Start your project" → sign up free with GitHub or email.</>},
+              {n:2,title:'Create a new project',body:<>Click "New project" → name it <strong>steelrose-leave</strong> → choose a password → select region: <strong>Europe West</strong> (London) → click Create.</>},
+              {n:3,title:'Run the database setup script',body:<>In your project, go to <strong>SQL Editor</strong> → click "New query" → paste the SQL from the file <strong>setup.sql</strong> (included in this download) → click Run.</>},
+              {n:4,title:'Get your API keys',body:<>Go to <strong>Project Settings → API</strong> → copy your <strong>Project URL</strong> and <strong>anon public key</strong>.</>},
+              {n:5,title:'Add your keys to this file',body:<>Open <strong>index.html</strong> in a text editor → find the two lines near the top that say <code style={{background:'var(--cof2)',padding:'1px 5px',borderRadius:4,fontSize:11}}>YOUR_SUPABASE_URL</code> and <code style={{background:'var(--cof2)',padding:'1px 5px',borderRadius:4,fontSize:11}}>YOUR_SUPABASE_ANON_KEY</code> → replace them with your actual values → save.</>},
+              {n:6,title:'(Optional) Set up email notifications',body:<>Go to <a href="https://emailjs.com" target="_blank" style={{color:'var(--cr)'}}>emailjs.com</a> → sign up free → connect your Gmail → create a template → replace the three <code style={{background:'var(--cof2)',padding:'1px 5px',borderRadius:4,fontSize:11}}>YOUR_EMAILJS_*</code> values in the file.</>},
+              {n:7,title:'Open the app',body:<>Open <strong>index.html</strong> in Chrome or Edge. The first person to register with an <strong>@steelrose.uk or @sr-globalservices.com</strong> email will be an admin. Share the file (or host on Netlify) with your team.</>},
+            ].map(s=>(
+              <div key={s.n} className="ss">
+                <div className="sn">{s.n}</div>
+                <div><h4>{s.title}</h4><p>{s.body}</p></div>
+              </div>
+            ))}
+          </div>
+          <div className="al al-ok">
+            <i className="ti ti-rocket"/>
+            <span>Once configured, all 25 employees can register, log in, and use the system from any device. Data is stored securely in the cloud.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════
+   AUTH — LOGIN / REGISTER
+══════════════════════════════════════════════════ */
+function Auth({ onAuth }) {
+  const [tab, setTab]     = useState('login');
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg]     = useState(null);
+  const [form, setForm]   = useState({ email:'', password:'', name:'', dept:'Corporate', confirmPassword:'' });
+  const set = (k,v) => { setForm(f=>({...f,[k]:v})); setMsg(null); };
+
+  const login = async () => {
+    if(!form.email||!form.password){ setMsg({e:true,t:'Please enter your email and password.'}); return; }
+    setLoading(true);
+    const { data, error } = await sb.auth.signInWithPassword({ email:form.email, password:form.password });
+    if(error){ setMsg({e:true,t:error.message}); setLoading(false); return; }
+    const { data: profile } = await sb.from('profiles').select('*').eq('id',data.user.id).single();
+    onAuth(profile);
+    setLoading(false);
+  };
+
+  const register = async () => {
+    if(!form.email||!form.password||!form.name){ setMsg({e:true,t:'Please fill in all fields.'}); return; }
+    const emailLower=form.email.toLowerCase(); if(!emailLower.endsWith('@steelrose.uk')&&!emailLower.endsWith('@sr-globalservices.com')){ setMsg({e:true,t:'Please use your @steelrose.uk or @sr-globalservices.com email address.'}); return; }
+    if(form.password!==form.confirmPassword){ setMsg({e:true,t:'Passwords do not match.'}); return; }
+    if(form.password.length<8){ setMsg({e:true,t:'Password must be at least 8 characters.'}); return; }
+    setLoading(true);
+    const { data, error } = await sb.auth.signUp({ email:form.email, password:form.password,
+      options:{ data:{ full_name:form.name, department:form.dept } }
+    });
+    if(error){ setMsg({e:true,t:error.message}); setLoading(false); return; }
+    setMsg({e:false,t:'Account created! Please check your email to verify, then log in.'});
+    setTab('login');
+    setLoading(false);
+  };
+
+  const resetPw = async () => {
+    if(!form.email){ setMsg({e:true,t:'Enter your email first.'}); return; }
+    setLoading(true);
+    await sb.auth.resetPasswordForEmail(form.email);
+    setMsg({e:false,t:'Password reset email sent. Check your inbox.'});
+    setLoading(false);
+  };
+
+  return (
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-hdr">
+          <div className="auth-logo">
+            <div className="auth-lb"><span className="auth-sr">S|R</span></div>
+            <div style={{textAlign:'left'}}><h1>Steelrose Legal Ltd</h1><p>Leave Management System</p></div>
+          </div>
+        </div>
+        <div className="auth-body">
+          {msg && <div className={`al ${msg.e?'al-e':'al-ok'}`}><i className={`ti ${msg.e?'ti-alert-circle':'ti-circle-check'}`}/>{msg.t}</div>}
+          <div className="auth-tabs">
+            <div className={`at ${tab==='login'?'on':''}`} onClick={()=>{setTab('login');setMsg(null);}}>Sign in</div>
+            <div className={`at ${tab==='register'?'on':''}`} onClick={()=>{setTab('register');setMsg(null);}}>Create account</div>
+          </div>
+
+          {tab==='login' && <>
+            <div style={{marginBottom:12}}>
+              <label className="flbl">Email address</label>
+              <input className="fi" type="email" placeholder="yourname@steelrose.uk or @sr-globalservices.com" value={form.email} onChange={e=>set('email',e.target.value)} onKeyDown={e=>e.key==='Enter'&&login()}/>
+            </div>
+            <div style={{marginBottom:16}}>
+              <label className="flbl">Password</label>
+              <input className="fi" type="password" placeholder="Your password" value={form.password} onChange={e=>set('password',e.target.value)} onKeyDown={e=>e.key==='Enter'&&login()}/>
+            </div>
+            <button className="btn btn-dk" style={{width:'100%',justifyContent:'center',padding:'10px'}} onClick={login} disabled={loading}>
+              {loading?'Signing in...':'Sign in to your account'}
+            </button>
+            <span className="auth-link" onClick={resetPw}>Forgot password?</span>
+            <div style={{marginTop:'1rem',padding:'1rem',background:'var(--cof2)',borderRadius:8,fontSize:11,color:'var(--cm)',lineHeight:1.7}}>
+              <strong style={{color:'var(--cr3)'}}>First time?</strong> Ask HR to set up your account, or click "Create account" above using your @steelrose.uk or @sr-globalservices.com email.
+            </div>
+          </>}
+
+          {tab==='register' && <>
+            <div style={{marginBottom:12}}>
+              <label className="flbl">Full name</label>
+              <input className="fi" type="text" placeholder="e.g. Alice Johnson" value={form.name} onChange={e=>set('name',e.target.value)}/>
+            </div>
+            <div style={{marginBottom:12}}>
+              <label className="flbl">Work email (@steelrose.uk or @sr-globalservices.com)</label>
+              <input className="fi" type="email" placeholder="e.g. alice.johnson@steelrose.uk" value={form.email} onChange={e=>set('email',e.target.value)}/>
+            </div>
+            <div style={{marginBottom:12}}>
+              <label className="flbl">Department</label>
+              <select className="fs" value={form.dept} onChange={e=>set('dept',e.target.value)}>
+                {DEPTS.map(d=><option key={d}>{d}</option>)}
+              </select>
+            </div>
+            <div style={{marginBottom:12}}>
+              <label className="flbl">Password (min 8 characters)</label>
+              <input className="fi" type="password" placeholder="Create a password" value={form.password} onChange={e=>set('password',e.target.value)}/>
+            </div>
+            <div style={{marginBottom:16}}>
+              <label className="flbl">Confirm password</label>
+              <input className="fi" type="password" placeholder="Repeat password" value={form.confirmPassword} onChange={e=>set('confirmPassword',e.target.value)}/>
+            </div>
+            <button className="btn btn-dk" style={{width:'100%',justifyContent:'center',padding:'10px'}} onClick={register} disabled={loading}>
+              {loading?'Creating account...':'Create account'}
+            </button>
+            <div style={{marginTop:'1rem',fontSize:11,color:'var(--cm)',lineHeight:1.7}}>
+              Your account will need to be activated by HR (Zarif or Meghana) before you can submit leave requests. You will receive a confirmation email.
+            </div>
+          </>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════ */
+function Sidebar({ me, page, setPage, unread, onLogout }) {
+  const isEmp = me.role==='employee';
+  const isMgr = me.role==='manager';
+  const isHR  = me.role==='hr'||me.role==='admin';
+  const N = (p,ic,lbl,cnt) => (
+    <div className={`nav ${page===p?'on':''}`} onClick={()=>setPage(p)}>
+      <i className={`ti ${ic}`}/><span>{lbl}</span>
+      {cnt>0&&<span className="nbadge">{cnt}</span>}
+    </div>
+  );
+  return (
+    <div className="sb">
+      <div className="sb-logo">
+        <div className="sb-badge"><span className="sb-sr">S|R</span></div>
+        <div className="sb-title"><h1>Steelrose Legal</h1><p>Leave Management</p></div>
+      </div>
+      <div className="nav-sec">Menu</div>
+      {N('dashboard','ti-layout-dashboard','Dashboard')}
+      {isEmp&&N('my-leaves','ti-calendar-event','My Leave')}
+      {isEmp&&N('apply','ti-circle-plus','Apply for Leave')}
+      {(isMgr||isHR)&&N('approvals','ti-checkup-list','Leave Approvals',unread)}
+      {isHR&&N('all-leaves','ti-list-details','All Requests')}
+      {isHR&&N('staff','ti-users','Staff & Balances')}
+      {N('calendar','ti-calendar','Calendar')}
+      {N('notifications','ti-bell','Notifications',unread)}
+      {isHR&&N('admin-panel','ti-settings','Admin Panel')}
+      {N('policy','ti-file-description','Leave Policy')}
+      <div className="sb-user">
+        <div className="sb-av" style={{...hashColor(me.full_name||'?')}}>{initials(me.full_name||'?')}</div>
+        <div style={{flex:1,minWidth:0}}>
+          <div className="sb-uname">{(me.full_name||'').split(' ')[0]}</div>
+          <div className="sb-urole">{me.role}</div>
+        </div>
+        <button className="out-btn" onClick={onLogout} title="Sign out"><i className="ti ti-logout"/></button>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════════════ */
+function Dashboard({ me, bal, leaves, allUsers, setPage, onApprove, onReject }) {
+  const isEmp = me.role==='employee';
+  const myLeaves = leaves.filter(l=>l.user_id===me.id);
+  const vis = visibleLeaves(me,leaves,allUsers).filter(l=>l.user_id!==me.id);
+  const pending = vis.filter(l=>l.status==='pending');
+  const onToday = vis.filter(l=>l.status==='approved'&&l.date_from<=TODAY&&l.date_to>=TODAY);
+  const al = (bal?.annual_total||AL)-(bal?.annual_used||0);
+  const sl = (bal?.sick_total||SL)-(bal?.sick_used||0);
+  const cf = (bal?.carry_forward||0)-(bal?.carry_used||0);
+
+  return <div>
+    <div className="topbar"><span className="tb-title">Welcome, {(me.full_name||'').split(' ')[0]}</span>
+      <span className="ybadge"><i className="ti ti-calendar" style={{fontSize:11,verticalAlign:-1,marginRight:4}}/>Apr 2026 – Mar 2027</span>
+    </div>
+    <div className={`role-bar ${me.role==='employee'?'emp':me.role==='manager'?'mgr':'hr'}`}>
+      <i className={`ti ${isEmp?'ti-user':me.role==='manager'?'ti-users':'ti-shield'}`}/>
+      {isEmp?'You can only see your own leave data.'
+       :me.role==='manager'?`Manager view — your team only.`
+       :`${me.role==='admin'?'Admin':'HR'} — full access to all employee data.`}
+    </div>
+    <div className="pg">
+      {cf>0&&<div className="al al-cf"><i className="ti ti-clock"/>You have <strong>{cf} carry-forward day{cf!==1?'s':''}</strong> expiring <strong>30 June 2026</strong> — {daysLeft()} days away.</div>}
+
+      {isEmp?<>
+        <div className="sg4">
+          <div className="sc"><div className="slbl">Annual days left</div><div className="sval" style={{color:al<=5?'#8B1A1A':'var(--cr3)'}}>{al}</div><div className="ssub">of {AL} entitlement</div></div>
+          <div className="sc"><div className="slbl">Sick days left</div><div className="sval" style={{color:sl<=1?'#8B1A1A':'var(--cr3)'}}>{sl}</div><div className="ssub">of {SL} entitlement</div></div>
+          <div className="sc"><div className="slbl">Carry-forward</div><div className="sval" style={{color:'#6B1A7A'}}>{cf}</div><div className="ssub">Expires 30 June 2026</div></div>
+          <div className="sc dk"><div className="slbl">My pending</div><div className="sval">{myLeaves.filter(l=>l.status==='pending').length}</div><div className="ssub">Awaiting approval</div></div>
+        </div>
+        <div className="card">
+          <div className="ch"><h3>My Leave Balance</h3><button className="btn btn-cr btn-sm" onClick={()=>setPage('apply')}><i className="ti ti-plus"/>Apply</button></div>
+          <div className="bg4">
+            {[{l:'Annual',bg:'#F9EFE6',c:'#7A1530',v:al,t:AL},{l:'Sick',bg:'#EDF5EE',c:'#1A6B35',v:sl,t:SL},{l:'Carry-fwd',bg:'#F7EFF8',c:'#6B1A7A',v:cf,t:CF_MAX},{l:'Bank hols',bg:'#EAF0FB',c:'#1A3A8B',v:BH-(bal?.bh_used||0),t:BH}].map(b=>(
+              <div key={b.l} className="bc" style={{background:b.bg}}>
+                <div className="blbl" style={{color:b.c}}>{b.l}</div>
+                <div className="bval" style={{color:b.c}}>{b.v}</div>
+                <div className="bsub" style={{color:b.c}}>of {b.t}</div>
+                <div className="bbar"><div className="bbar-f" style={{width:`${Math.round(Math.max(0,b.v)/b.t*100)}%`,background:b.c}}/></div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="card">
+          <div className="ch"><h3>My Recent Requests</h3><button className="btn btn-sm" onClick={()=>setPage('my-leaves')}>View all</button></div>
+          {myLeaves.length===0?<Empty icon="ti-calendar-off" text="No leave requests yet."/>
+          :<div className="tw"><table><thead><tr><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th></tr></thead>
+          <tbody>{myLeaves.slice(0,5).map(l=><tr key={l.id}><td><TBadge type={l.leave_type} carry={l.is_carry}/></td><td>{l.date_from}</td><td>{l.date_to}</td><td style={{fontWeight:500}}>{l.days}</td><td><SBadge s={l.status}/></td></tr>)}</tbody>
+          </table></div>}
+        </div>
+      </>:<>
+        <div className="sg4">
+          <div className="sc dk"><div className="slbl">Pending approvals</div><div className="sval">{pending.length}</div><div className="ssub">Needs your action</div></div>
+          <div className="sc"><div className="slbl">On leave today</div><div className="sval">{onToday.length}</div><div className="ssub">From your scope</div></div>
+          <div className="sc"><div className="slbl">My annual left</div><div className="sval">{al}</div><div className="ssub">Your own balance</div></div>
+          <div className="sc"><div className="slbl">Total in scope</div><div className="sval">{visibleUsers(me,allUsers).filter(u=>u.id!==me.id).length}</div><div className="ssub">Staff you manage</div></div>
+        </div>
+        {pending.length>0&&<div className="card">
+          <div className="ch"><h3>Action Required</h3><button className="btn btn-sm" onClick={()=>setPage('approvals')}>View all</button></div>
+          {pending.slice(0,4).map(l=>{const u=allUsers.find(x=>x.id===l.user_id)||{}; return(
+            <div key={l.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 1.3rem',borderBottom:'1px solid #EDE5DA',gap:'1rem'}}>
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <Av name={u.full_name||'?'}/>
+                <div><div style={{fontWeight:500,fontSize:13}}>{u.full_name} <DC dept={u.department}/></div>
+                <div style={{fontSize:11,color:'var(--cm)'}}>{l.leave_type} · {l.date_from} → {l.date_to} · <strong>{l.days}d</strong></div></div>
+              </div>
+              <div style={{display:'flex',gap:6}}>
+                <button className="btn btn-app btn-sm" onClick={()=>onApprove(l.id)}><i className="ti ti-check"/>Approve</button>
+                <button className="btn btn-rej btn-sm" onClick={()=>onReject(l.id)}><i className="ti ti-x"/>Reject</button>
+              </div>
+            </div>
+          );})}
+        </div>}
+      </>}
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   MY LEAVES
+══════════════════════════════════════════════════ */
+function MyLeaves({ me, bal, leaves, setPage }) {
+  const mine = leaves.filter(l=>l.user_id===me.id);
+  const al=(bal?.annual_total||AL)-(bal?.annual_used||0), sl=(bal?.sick_total||SL)-(bal?.sick_used||0), cf=(bal?.carry_forward||0)-(bal?.carry_used||0);
+  return <div>
+    <div className="topbar"><span className="tb-title">My Leave</span><button className="btn btn-cr" onClick={()=>setPage('apply')}><i className="ti ti-plus"/>Apply for Leave</button></div>
+    <div className="role-bar emp"><i className="ti ti-lock-square"/>Your own leave data only.</div>
+    <div className="pg">
+      <div className="card">
+        <div className="ch"><h3>My Balance — Apr 2026/Mar 2027</h3></div>
+        <div className="bg4">
+          {[{l:'Annual',bg:'#F9EFE6',c:'#7A1530',v:al,t:AL},{l:'Sick',bg:'#EDF5EE',c:'#1A6B35',v:sl,t:SL},{l:'Carry-fwd',bg:'#F7EFF8',c:'#6B1A7A',v:cf,t:CF_MAX},{l:'Bank hols',bg:'#EAF0FB',c:'#1A3A8B',v:BH-(bal?.bh_used||0),t:BH}].map(b=>(
+            <div key={b.l} className="bc" style={{background:b.bg}}>
+              <div className="blbl" style={{color:b.c}}>{b.l}</div>
+              <div className="bval" style={{color:b.c}}>{b.v}</div>
+              <div className="bsub" style={{color:b.c}}>of {b.t}</div>
+              <div className="bbar"><div className="bbar-f" style={{width:`${Math.round(Math.max(0,b.v)/b.t*100)}%`,background:b.c}}/></div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="card">
+        <div className="ch"><h3>All My Requests</h3></div>
+        {mine.length===0?<Empty icon="ti-calendar-off" text="No leave requests yet."/>
+        :<div className="tw"><table><thead><tr><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Applied</th><th>Status</th><th>Clio</th></tr></thead>
+        <tbody>{mine.map(l=><tr key={l.id}><td><TBadge type={l.leave_type} carry={l.is_carry}/></td><td>{l.date_from}</td><td>{l.date_to}</td><td style={{fontWeight:500}}>{l.days}</td><td>{l.created_at?.split('T')[0]}</td><td><SBadge s={l.status}/></td><td style={{fontSize:11,color:'var(--cm)'}}>{l.clio_ref||'—'}</td></tr>)}</tbody>
+        </table></div>}
+      </div>
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   APPLY LEAVE
+══════════════════════════════════════════════════ */
+function ApplyLeave({ me, bal, onSubmit }) {
+  const [f,setF]=useState({type:'Annual Leave',from:'',to:'',reason:'',carry:false,clio:CLIO});
+  const [msg,setMsg]=useState(null);
+  const al=(bal?.annual_total||AL)-(bal?.annual_used||0), sl=(bal?.sick_total||SL)-(bal?.sick_used||0), cf=(bal?.carry_forward||0)-(bal?.carry_used||0);
+  const set=(k,v)=>{ setF(x=>({...x,[k]:v})); setMsg(null); };
+
+  const submit=async()=>{
+    if(!f.from||!f.to||!f.reason.trim()){setMsg({e:true,t:'Please fill in all required fields.'});return;}
+    if(f.from>f.to){setMsg({e:true,t:'From date must be before to date.'});return;}
+    if(f.carry&&f.to>CARRY_EXPIRY){setMsg({e:true,t:'Carry-forward days must be taken by 30 June 2026.'});return;}
+    const days=dBetween(f.from,f.to);
+    if(f.type==='Annual Leave'&&!f.carry&&days>al){setMsg({e:true,t:`Only ${al} annual days available.`});return;}
+    if(f.type==='Sick Leave'&&days>sl){setMsg({e:true,t:`Only ${sl} sick days available.`});return;}
+    if(f.carry&&days>cf){setMsg({e:true,t:`Only ${cf} carry-forward days available.`});return;}
+    await onSubmit({leave_type:f.type,date_from:f.from,date_to:f.to,days,reason:f.reason,is_carry:f.carry,clio_ref:f.clio});
+    setF({type:'Annual Leave',from:'',to:'',reason:'',carry:false,clio:CLIO});
+    setMsg({e:false,t:'Request submitted! Your manager has been notified.'});
+  };
+
+  return <div>
+    <div className="topbar"><span className="tb-title">Apply for Leave</span></div>
+    <div className="role-bar emp"><i className="ti ti-lock-square"/>Submitting for yourself — {me.full_name}</div>
+    <div className="pg">
+      {msg&&<div className={`al ${msg.e?'al-e':'al-ok'}`}><i className={`ti ${msg.e?'ti-alert-circle':'ti-circle-check'}`}/>{msg.t}</div>}
+      <div className="sg2">
+        <div>
+          <div className="card">
+            <div className="ch"><h3>New Leave Request</h3></div>
+            <div className="fg">
+              <div><label className="flbl">Leave Type *</label><select className="fs" value={f.type} onChange={e=>set('type',e.target.value)}>{LEAVE_TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
+              <div><label className="flbl">Using Carry-Forward Days?</label><select className="fs" value={f.carry?'1':'0'} onChange={e=>set('carry',e.target.value==='1')}><option value="0">No</option><option value="1">Yes (exp. 30 Jun 2026)</option></select></div>
+              <div><label className="flbl">From Date *</label><input className="fi" type="date" value={f.from} min={YR_START} onChange={e=>set('from',e.target.value)}/></div>
+              <div><label className="flbl">To Date *</label><input className="fi" type="date" value={f.to} min={f.from||YR_START} onChange={e=>set('to',e.target.value)}/></div>
+              <div className={f.carry&&f.to>CARRY_EXPIRY?'fgf':''} style={{gridColumn: f.carry&&f.to>CARRY_EXPIRY?'1/-1':'auto'}}>
+                {f.carry&&f.to>CARRY_EXPIRY&&<div className="al al-w" style={{marginBottom:8}}><i className="ti ti-alert-triangle"/>Carry-forward days must be used by 30 June 2026.</div>}
+              </div>
+              <div style={{gridColumn:'1/-1'}}><label className="flbl">Reason *</label><textarea className="fta" placeholder="Brief reason. For sick leave over 3 days, a medical certificate is required on return." value={f.reason} onChange={e=>set('reason',e.target.value)}/></div>
+              <div style={{gridColumn:'1/-1'}}><label className="flbl">Clio Matter Reference</label><input className="fi" value={f.clio} onChange={e=>set('clio',e.target.value)} placeholder={CLIO}/></div>
+            </div>
+            <div className="fac">
+              <button className="btn" onClick={()=>{setF({type:'Annual Leave',from:'',to:'',reason:'',carry:false,clio:CLIO});setMsg(null);}}>Clear</button>
+              <button className="btn btn-dk" onClick={submit}><i className="ti ti-send"/>Submit Request</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="card" style={{marginBottom:'1rem'}}>
+            <div className="ch"><h3>Your Balance</h3></div>
+            <div className="bg3">
+              {[{l:'Annual',bg:'#F9EFE6',c:'#7A1530',v:al,t:AL},{l:'Sick',bg:'#EDF5EE',c:'#1A6B35',v:sl,t:SL},{l:'Carry',bg:'#F7EFF8',c:'#6B1A7A',v:cf,t:CF_MAX}].map(b=>(
+                <div key={b.l} className="bc" style={{background:b.bg}}><div className="blbl" style={{color:b.c}}>{b.l}</div><div className="bval" style={{color:b.c,fontSize:24}}>{b.v}</div><div className="bsub" style={{color:b.c}}>of {b.t}</div></div>
+              ))}
+            </div>
+          </div>
+          <div className="card"><div className="chd"><h3>Policy Quick Reference</h3></div>
+            <div style={{padding:'.8rem 1.3rem'}}>
+              {[['Annual leave','20 days'],['Sick leave','5 days'],['Carry-forward','Up to 5 days'],['Carry-fwd expiry','30 June 2026'],['Notice (planned)','1 month min'],['Clio matter',CLIO]].map(([k,v])=>(
+                <div key={k} className="pr"><span>{k}</span><span>{v}</span></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   APPROVALS — with Escalate to Partner (Zu) feature
+══════════════════════════════════════════════════ */
+function Approvals({ me, leaves, allUsers, balances, onApprove, onReject, onView, onEscalate }) {
+  const vis = visibleLeaves(me,leaves,allUsers).filter(l=>l.user_id!==me.id);
+  const pending = vis.filter(l=>l.status==='pending'&&!l.escalated_to_ceo);
+  const escalated = vis.filter(l=>l.escalated_to_ceo&&l.status==='pending');
+  const history = vis.filter(l=>l.status!=='pending');
+  const ceo = allUsers.find(u=>u.role==='admin');
+  return <div>
+    <div className="topbar"><span className="tb-title">Leave Approvals</span><span className="ybadge">{pending.length} pending</span></div>
+    <div className={`role-bar ${me.role==='manager'?'mgr':'hr'}`}><i className="ti ti-users"/>Showing your team's requests only.</div>
+    <div className="pg">
+      {pending.length===0&&escalated.length===0&&<div className="al al-ok"><i className="ti ti-circle-check"/>All caught up — no pending requests.</div>}
+
+      {pending.map(l=>{
+        const u=allUsers.find(x=>x.id===l.user_id)||{};
+        const b=balances[l.user_id]||{};
+        const al2=(b.annual_total||AL)-(b.annual_used||0);
+        const cf2=(b.carry_forward||0)-(b.carry_used||0);
+        return(
+          <div key={l.id} className="apc">
+            <div className="apb">
+              <div style={{display:'flex',alignItems:'center',gap:12}}>
+                <Av name={u.full_name||'?'} size="lg"/>
+                <div>
+                  <div style={{fontWeight:500,fontSize:14}}>{u.full_name} <DC dept={u.department}/>{l.is_carry&&<span className="bdg bcf" style={{marginLeft:6}}>Carry-fwd</span>}</div>
+                  <div style={{fontSize:12,color:'var(--cm)',marginTop:3}}>{l.leave_type} · {l.date_from} → {l.date_to} · <strong>{l.days} day{l.days!==1?'s':''}</strong></div>
+                  {l.reason&&<div style={{fontSize:12,color:'var(--cm)',fontStyle:'italic',marginTop:2}}>"{l.reason}"</div>}
+                </div>
+              </div>
+              <div style={{display:'flex',gap:8,flexShrink:0,flexWrap:'wrap',justifyContent:'flex-end'}}>
+                <button className="btn btn-app" onClick={()=>onApprove(l.id)}><i className="ti ti-check"/>Approve</button>
+                <button className="btn btn-rej"  onClick={()=>onReject(l.id)}><i className="ti ti-x"/>Reject</button>
+                <button className="btn btn-sm"   onClick={()=>onView(l)}><i className="ti ti-eye"/></button>
+                {me.role==='manager'&&ceo&&(
+                  <button className="btn btn-sm" style={{background:'#F7EFF8',color:'#6B1A7A',borderColor:'#D9B5E0'}}
+                    onClick={()=>onEscalate(l.id,ceo)}
+                    title={`Escalate to ${ceo.full_name} (Partner) for Partner approval`}>
+                    <i className="ti ti-arrow-forward-up"/>Escalate to Partner
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="apm">
+              <span>Annual left: <strong style={{color:al2<=3?'#8B1A1A':'var(--cg)'}}>{al2}d</strong></span>
+              {cf2>0&&<span>Carry-fwd: <strong style={{color:'#6B1A7A'}}>{cf2}d</strong></span>}
+              <span>Clio: <strong>{l.clio_ref||'—'}</strong></span>
+            </div>
+          </div>
+        );
+      })}
+
+      {escalated.length>0&&(
+        <div className="card" style={{marginBottom:'1rem',border:'1px solid #D9B5E0'}}>
+          <div className="ch" style={{background:'#F7EFF8'}}><h3 style={{color:'#6B1A7A'}}>Escalated to Partner — Awaiting Zu's Approval (Partner)</h3></div>
+          {escalated.map(l=>{const u=allUsers.find(x=>x.id===l.user_id)||{};return(
+            <div key={l.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 1.3rem',borderBottom:'1px solid #EDE5DA',gap:'1rem'}}>
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <Av name={u.full_name||'?'}/>
+                <div>
+                  <div style={{fontWeight:500,fontSize:13}}>{u.full_name}</div>
+                  <div style={{fontSize:11,color:'var(--cm)'}}>{l.leave_type} · {l.date_from} → {l.date_to} · {l.days}d</div>
+                </div>
+              </div>
+              <span className="bdg" style={{background:'#F7EFF8',color:'#6B1A7A'}}>Awaiting Partner</span>
+            </div>
+          );})}
+        </div>
+      )}
+
+      {history.length>0&&<div className="card"><div className="ch"><h3>Decision History</h3></div>
+        <div className="tw"><table><thead><tr><th>Employee</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>{history.slice(0,10).map(l=>{const u=allUsers.find(x=>x.id===l.user_id)||{};return(
+          <tr key={l.id} onClick={()=>onView(l)} style={{cursor:'pointer'}}>
+            <td><div className="tdn"><Av name={u.full_name||'?'}/>{u.full_name}</div></td>
+            <td><TBadge type={l.leave_type} carry={l.is_carry}/></td>
+            <td>{l.date_from}</td><td>{l.date_to}</td>
+            <td style={{fontWeight:500}}>{l.days}</td>
+            <td><SBadge s={l.status}/></td>
+            <td style={{fontSize:11,color:'#6B1A7A'}}>{l.escalated_to_ceo?'Via Partner':''}</td>
+          </tr>
+        );})}
+        </tbody></table></div>
+      </div>}
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   EXCEL EXPORT HELPER
+══════════════════════════════════════════════════ */
+function exportToExcel(leaves, allUsers, balances) {
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1 — All Leave Requests
+  const leaveRows = leaves.map(l => {
+    const u = allUsers.find(x=>x.id===l.user_id)||{};
+    const ab = l.approved_by ? allUsers.find(x=>x.id===l.approved_by) : null;
+    return {
+      'Employee Name':   u.full_name||'',
+      'Department':      u.department||'',
+      'Email':           u.email||'',
+      'Leave Type':      l.leave_type||'',
+      'Carry Forward':   l.is_carry?'Yes':'No',
+      'From':            l.date_from||'',
+      'To':              l.date_to||'',
+      'Days':            l.days||0,
+      'Reason':          l.reason||'',
+      'Status':          l.status||'',
+      'Approved By':     ab?.full_name||'',
+      'Approved Date':   l.approved_at?l.approved_at.split('T')[0]:'',
+      'Clio Reference':  l.clio_ref||'',
+      'Applied On':      l.created_at?l.created_at.split('T')[0]:'',
+    };
+  });
+  const ws1 = XLSX.utils.json_to_sheet(leaveRows);
+  ws1['!cols'] = [{wch:22},{wch:24},{wch:30},{wch:18},{wch:14},{wch:12},{wch:12},{wch:6},{wch:30},{wch:10},{wch:22},{wch:14},{wch:24},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws1, 'Leave Requests');
+
+  // Sheet 2 — Staff Balances
+  const balRows = allUsers.map(u => {
+    const b = balances[u.id]||{};
+    const al=(b.annual_total||20)-(b.annual_used||0);
+    const sl=(b.sick_total||5)-(b.sick_used||0);
+    const cf=(b.carry_forward||0)-(b.carry_used||0);
+    return {
+      'Employee Name':     u.full_name||'',
+      'Department':        u.department||'',
+      'Role':              u.role||'',
+      'Annual Total':      b.annual_total||20,
+      'Annual Used':       b.annual_used||0,
+      'Annual Remaining':  al,
+      'Sick Total':        b.sick_total||5,
+      'Sick Used':         b.sick_used||0,
+      'Sick Remaining':    sl,
+      'Carry Forward':     b.carry_forward||0,
+      'Carry Used':        b.carry_used||0,
+      'Carry Remaining':   cf,
+      'Total Available':   al+cf,
+    };
+  });
+  const ws2 = XLSX.utils.json_to_sheet(balRows);
+  ws2['!cols'] = [{wch:22},{wch:24},{wch:12},{wch:13},{wch:12},{wch:17},{wch:11},{wch:10},{wch:15},{wch:14},{wch:12},{wch:15},{wch:15}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Staff Balances');
+
+  // Sheet 3 — Summary by Department
+  const depts = [...new Set(allUsers.map(u=>u.department).filter(Boolean))];
+  const sumRows = depts.map(dept => {
+    const dLeaves = leaves.filter(l=>(allUsers.find(u=>u.id===l.user_id)||{}).department===dept);
+    return {
+      'Department':   dept,
+      'Total Leaves': dLeaves.length,
+      'Approved':     dLeaves.filter(l=>l.status==='approved').length,
+      'Pending':      dLeaves.filter(l=>l.status==='pending').length,
+      'Rejected':     dLeaves.filter(l=>l.status==='rejected').length,
+      'Total Days':   dLeaves.filter(l=>l.status==='approved').reduce((s,l)=>s+(l.days||0),0),
+    };
+  });
+  const ws3 = XLSX.utils.json_to_sheet(sumRows);
+  ws3['!cols'] = [{wch:28},{wch:13},{wch:10},{wch:10},{wch:10},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws3, 'Department Summary');
+
+  const date = new Date().toISOString().split('T')[0];
+  XLSX.writeFile(wb, `SteelRose_Leave_Report_${date}.xlsx`);
+}
+
+/* ══════════════════════════════════════════════════
+   ALL LEAVES (HR)
+══════════════════════════════════════════════════ */
+function AllLeaves({ me, leaves, allUsers, balances, onApprove, onReject, onView }) {
+  if(me.role!=='hr'&&me.role!=='admin') return <AccessDenied/>;
+  const [filter,setFilter]=useState('all');
+  const filtered=filter==='all'?leaves:leaves.filter(l=>l.status===filter);
+  const pc=leaves.filter(l=>l.status==='pending').length;
+  return <div>
+    <div className="topbar"><span className="tb-title">All Leave Requests</span>
+      <div className="tb-right">
+        <div className="tabs">{['all','pending','approved','rejected'].map(f=>(
+          <div key={f} className={`tab ${filter===f?'on':''}`} onClick={()=>setFilter(f)}>{f.charAt(0).toUpperCase()+f.slice(1)}{f==='pending'&&<span className="tcnt">{pc}</span>}</div>
+        ))}</div>
+        <button className="btn" style={{background:'#1A6B35',color:'#fff',borderColor:'#1A6B35'}} onClick={()=>exportToExcel(leaves,allUsers,balances)}>
+          <i className="ti ti-file-spreadsheet"/>Export to Excel
+        </button>
+      </div>
+    </div>
+    <div className="role-bar hr"><i className="ti ti-shield"/>HR/Partner — all employees</div>
+    <div className="pg">
+      <div className="card">
+        {filtered.length===0?<Empty icon="ti-calendar-off" text="No requests found."/>
+        :<div className="tw"><table><thead><tr><th>Employee</th><th>Dept</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>{filtered.map(l=>{const u=allUsers.find(x=>x.id===l.user_id)||{};return(
+          <tr key={l.id}>
+            <td><div className="tdn"><Av name={u.full_name||'?'}/>{u.full_name}</div></td>
+            <td><DC dept={u.department}/></td>
+            <td><TBadge type={l.leave_type} carry={l.is_carry}/></td>
+            <td>{l.date_from}</td><td>{l.date_to}</td><td style={{fontWeight:500,textAlign:'center'}}>{l.days}</td>
+            <td><SBadge s={l.status}/></td>
+            <td><div style={{display:'flex',gap:4}}>
+              {l.status==='pending'&&<><button className="btn btn-app btn-sm" onClick={()=>onApprove(l.id)}><i className="ti ti-check"/></button><button className="btn btn-rej btn-sm" onClick={()=>onReject(l.id)}><i className="ti ti-x"/></button></>}
+              <button className="btn btn-sm" onClick={()=>onView(l)}><i className="ti ti-eye"/></button>
+            </div></td>
+          </tr>
+        );})}
+        </tbody></table></div>}
+      </div>
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   STAFF (HR)
+══════════════════════════════════════════════════ */
+function Staff({ me, allUsers, balances, leaves }) {
+  if(me.role!=='hr'&&me.role!=='admin') return <AccessDenied/>;
+  const [tab,setTab]=useState('all');
+  const depts=[...new Set(allUsers.map(u=>u.department).filter(Boolean))];
+  const list=tab==='all'?allUsers:allUsers.filter(u=>u.department===tab);
+  return <div>
+    <div className="topbar"><span className="tb-title">Staff & Balances</span>
+      <div className="tb-right">
+        <div className="tabs"><div className={`tab ${tab==='all'?'on':''}`} onClick={()=>setTab('all')}>All ({allUsers.length})</div>
+          {depts.map(d=><div key={d} className={`tab ${tab===d?'on':''}`} onClick={()=>setTab(d)}>{d}</div>)}
+        </div>
+        <button className="btn" style={{background:'#1A6B35',color:'#fff',borderColor:'#1A6B35'}} onClick={()=>exportToExcel(leaves,allUsers,balances)}>
+          <i className="ti ti-file-spreadsheet"/>Export to Excel
+        </button>
+      </div>
+    </div>
+    <div className="role-bar hr"><i className="ti ti-shield"/>Full staff visibility — HR/Admin only.</div>
+    <div className="pg">
+      <div className="card">
+        <div className="tw"><table><thead><tr><th>Name</th><th>Role</th><th>Dept</th><th style={{textAlign:'center'}}>Annual</th><th style={{textAlign:'center'}}>Sick</th><th style={{textAlign:'center'}}>Carry</th><th style={{textAlign:'center'}}>Total</th><th>Status</th></tr></thead>
+        <tbody>{list.map(u=>{
+          const b=balances[u.id]||{};const al=(b.annual_total||AL)-(b.annual_used||0),sl=(b.sick_total||SL)-(b.sick_used||0),cf=(b.carry_forward||0)-(b.carry_used||0);
+          const onL=leaves.some(l=>l.user_id===u.id&&l.status==='approved'&&l.date_from<=TODAY&&l.date_to>=TODAY);
+          return <tr key={u.id}>
+            <td><div className="tdn"><Av name={u.full_name||'?'}/>{u.full_name}</div></td>
+            <td><RB role={u.role}/></td><td><DC dept={u.department}/></td>
+            <td style={{textAlign:'center'}}><strong style={{color:al<=3?'#8B1A1A':'var(--cg)'}}>{al}</strong></td>
+            <td style={{textAlign:'center'}}><strong style={{color:sl<=1?'#8B1A1A':'var(--cg)'}}>{sl}</strong></td>
+            <td style={{textAlign:'center'}}>{cf>0?<span className="bdg bcf">{cf}d</span>:<span style={{color:'#C8BEB4'}}>—</span>}</td>
+            <td style={{textAlign:'center',fontWeight:500}}>{al+cf}</td>
+            <td><span className={`bdg ${onL?'bp':'ba'}`}>{onL?'On leave':'Active'}</span></td>
+          </tr>;
+        })}</tbody></table></div>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   CALENDAR — role-aware
+   Employee: own leaves only (full history shown below)
+   Manager:  their team
+   Admin/HR: full company calendar with all names
+══════════════════════════════════════════════════ */
+function CalPage({ me, leaves, allUsers }) {
+  const [month,setMonth]=useState(new Date());
+  const isEmp   = me.role==='employee';
+  const isAdmin = me.role==='admin'||me.role==='hr';
+
+  // employees see ONLY their own leaves
+  const calLeaves = isEmp
+    ? leaves.filter(l=>l.user_id===me.id)
+    : visibleLeaves(me,leaves,allUsers);
+
+  const yr=month.getFullYear(),mo=month.getMonth();
+  const fd=new Date(yr,mo,1).getDay(),dim=new Date(yr,mo+1,0).getDate();
+  const mn=month.toLocaleString('default',{month:'long'});
+  const ds=d=>`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const mStr=`${yr}-${String(mo+1).padStart(2,'0')}`;
+  const mLeaves=calLeaves.filter(l=>l.date_from?.startsWith(mStr)||l.date_to?.startsWith(mStr));
+
+  // for admin: who is on leave on a given day
+  const whoOnDay = s => calLeaves
+    .filter(l=>l.status==='approved'&&l.date_from<=s&&l.date_to>=s)
+    .map(l=>(allUsers.find(u=>u.id===l.user_id)||{}).full_name)
+    .filter(Boolean);
+
+  return <div>
+    <div className="topbar"><span className="tb-title">Leave Calendar</span>
+      <div style={{display:'flex',alignItems:'center',gap:8}}>
+        <button className="btn btn-sm" onClick={()=>setMonth(new Date(yr,mo-1,1))}><i className="ti ti-chevron-left"/></button>
+        <span style={{fontSize:14,fontWeight:500,minWidth:130,textAlign:'center',color:'var(--cr3)',fontFamily:'var(--fd)'}}>{mn} {yr}</span>
+        <button className="btn btn-sm" onClick={()=>setMonth(new Date(yr,mo+1,1))}><i className="ti ti-chevron-right"/></button>
+      </div>
+    </div>
+    <div className={`role-bar ${isEmp?'emp':me.role==='manager'?'mgr':'hr'}`}>
+      <i className="ti ti-calendar-event"/>
+      {isEmp?'Your personal leave calendar — your own leave history only.'
+       :isAdmin?'Partner/Admin view — full company calendar showing all staff on leave.'
+       :'Manager view — your team's leave calendar.'}
+    </div>
+    <div className="pg">
+      <div className="sg2">
+        <div className="card">
+          <div className="cg">
+            {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=><div key={d} className="cdn">{d}</div>)}
+            {Array(fd).fill(null).map((_,i)=><div key={'e'+i} className="cd om"></div>)}
+            {Array(dim).fill(null).map((_,i)=>{
+              const d=i+1,s=ds(d);
+              const names=whoOnDay(s);
+              const isToday=s===TODAY;
+              const isApproved=calLeaves.some(l=>l.status==='approved'&&l.date_from<=s&&l.date_to>=s);
+              const isPending=calLeaves.some(l=>l.status==='pending'&&l.date_from<=s&&l.date_to>=s);
+              const cls=isToday?'td':isApproved?'ap':isPending?'pn':'';
+              return (
+                <div key={d} className={`cd ${cls}`} title={names.length>0?`On leave: ${names.join(', ')}`:''}
+                  style={{flexDirection:'column',gap:1,position:'relative',cursor:names.length>0?'help':'default'}}>
+                  <span>{d}</span>
+                  {isAdmin&&names.length>0&&!isToday&&(
+                    <span style={{fontSize:8,fontWeight:600,lineHeight:1,opacity:.85}}>
+                      {names.length===1?names[0].split(' ')[0]:`${names.length} staff`}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div style={{padding:'0 1rem 1rem',display:'flex',gap:14,fontSize:11,color:'var(--cm)',flexWrap:'wrap'}}>
+            {[['#EDF5EE','Approved'],['#FEF5E4','Pending'],['var(--cr)','Today']].map(([bg,lbl])=>(
+              <span key={lbl} style={{display:'flex',alignItems:'center',gap:5}}><span style={{width:10,height:10,borderRadius:2,background:bg,border:'1px solid rgba(0,0,0,.1)',display:'inline-block'}}/>{lbl}</span>
+            ))}
+            {isAdmin&&<span style={{color:'var(--cm)',fontStyle:'italic'}}>Hover over a date to see who is away</span>}
+          </div>
+        </div>
+
+        <div>
+          <div className="card" style={{marginBottom:'1rem'}}>
+            <div className="ch"><h3>Leave This Month</h3></div>
+            {mLeaves.length===0?<Empty icon="ti-calendar" text="No leave this month"/>
+            :mLeaves.map(l=>{const u=allUsers.find(x=>x.id===l.user_id)||{};return(
+              <div key={l.id} style={{display:'flex',alignItems:'center',gap:10,padding:'10px 1.3rem',borderBottom:'1px solid #EDE5DA'}}>
+                <Av name={u.full_name||'?'}/>
+                <div style={{flex:1,minWidth:0}}>
+                  {!isEmp&&<div style={{fontSize:13,fontWeight:500,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{u.full_name}</div>}
+                  {isEmp&&<div style={{fontSize:13,fontWeight:500}}>{l.leave_type}</div>}
+                  <div style={{fontSize:11,color:'var(--cm)'}}>{l.date_from} → {l.date_to} · {l.days}d</div>
+                </div>
+                <SBadge s={l.status}/>
+              </div>
+            );})}
+          </div>
+
+          {/* Employee: show full personal leave history */}
+          {isEmp&&(
+            <div className="card">
+              <div className="ch"><h3>My Full Leave History</h3></div>
+              {leaves.filter(l=>l.user_id===me.id).length===0
+                ?<Empty icon="ti-calendar-off" text="No leave history yet."/>
+                :<div className="tw"><table>
+                  <thead><tr><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th></tr></thead>
+                  <tbody>{leaves.filter(l=>l.user_id===me.id).map(l=>(
+                    <tr key={l.id}>
+                      <td><TBadge type={l.leave_type} carry={l.is_carry}/></td>
+                      <td>{l.date_from}</td><td>{l.date_to}</td>
+                      <td style={{fontWeight:500}}>{l.days}</td>
+                      <td><SBadge s={l.status}/></td>
+                    </tr>
+                  ))}</tbody>
+                </table></div>
+              }
+            </div>
+          )}
+
+          {/* Admin: show who is on leave today */}
+          {isAdmin&&(
+            <div className="card">
+              <div className="ch"><h3>On Leave Today</h3></div>
+              {calLeaves.filter(l=>l.status==='approved'&&l.date_from<=TODAY&&l.date_to>=TODAY).length===0
+                ?<Empty icon="ti-users" text="Everyone is in today."/>
+                :calLeaves.filter(l=>l.status==='approved'&&l.date_from<=TODAY&&l.date_to>=TODAY).map(l=>{
+                  const u=allUsers.find(x=>x.id===l.user_id)||{};
+                  return(
+                    <div key={l.id} style={{display:'flex',alignItems:'center',gap:10,padding:'10px 1.3rem',borderBottom:'1px solid #EDE5DA'}}>
+                      <Av name={u.full_name||'?'}/>
+                      <div style={{flex:1}}>
+                        <div style={{fontSize:13,fontWeight:500}}>{u.full_name}</div>
+                        <div style={{fontSize:11,color:'var(--cm)'}}>{u.department} · back {l.date_to}</div>
+                      </div>
+                      <DC dept={u.department}/>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   NOTIFICATIONS
+══════════════════════════════════════════════════ */
+function Notifs({ me, notifs, leaves, allUsers, onApprove, onReject }) {
+  const mine = notifs.filter(n=>n.user_id===me.id);
+  return <div>
+    <div className="topbar"><span className="tb-title">Notifications</span><span className="ybadge">{mine.filter(n=>!n.is_read).length} unread</span></div>
+    <div className={`role-bar ${me.role==='employee'?'emp':me.role==='manager'?'mgr':'hr'}`}><i className="ti ti-bell"/>Your notifications only.</div>
+    <div className="pg">
+      <div className="card">
+        {mine.length===0?<Empty icon="ti-bell-off" text="No notifications"/>
+        :mine.map(n=>{const l=leaves.find(x=>x.id===n.leave_id);return(
+          <div key={n.id} className={`ni ${n.is_read?'':'unr'}`}>
+            <div className="ndot"/>
+            <div style={{flex:1}}><div style={{fontSize:13,marginBottom:2}}>{n.message}</div><div style={{fontSize:11,color:'var(--cm)'}}>{n.created_at?.split('T')[0]}</div></div>
+            {l&&l.status==='pending'&&(me.role!=='employee')
+              ?<div style={{display:'flex',gap:6}}><button className="btn btn-app btn-sm" onClick={()=>onApprove(l.id)}>Approve</button><button className="btn btn-rej btn-sm" onClick={()=>onReject(l.id)}>Reject</button></div>
+              :<SBadge s={l?.status||'read'}/>
+            }
+          </div>
+        );})}
+      </div>
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   ADMIN PANEL
+══════════════════════════════════════════════════ */
+function AdminPanel({ me, allUsers, onUpdateRole, onUpdateManager, emailCfg, setEmailCfg }) {
+  if(me.role!=='hr'&&me.role!=='admin') return <AccessDenied/>;
+  const [cfg,setCfg]=useState(emailCfg);
+  const [saved,setSaved]=useState(false);
+  const [testSt,setTestSt]=useState(null);
+  const saveCfg=()=>{ setEmailCfg(cfg); setSaved(true); setTimeout(()=>setSaved(false),3000); };
+  const testEmail=async()=>{
+    setTestSt('sending');
+    try{
+      await fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:cfg.svc,template_id:cfg.tpl,user_id:cfg.key,template_params:{to_email:me.email,to_name:me.full_name,subject:'Test — SteelRose Leave System',message:'Email notifications are working.',from_name:'SteelRose Leave System'}})});
+      setTestSt('ok');
+    }catch(e){setTestSt('fail');}
+    setTimeout(()=>setTestSt(null),4000);
+  };
+  const managers = allUsers.filter(u=>u.role==='manager'||u.role==='hr'||u.role==='admin');
+  return <div>
+    <div className="topbar"><span className="tb-title">Admin Panel</span></div>
+    <div className="role-bar admin"><i className="ti ti-shield"/>Partner/Admin only — role management and system settings.</div>
+    <div className="pg">
+      {/* ROLE MANAGEMENT */}
+      <div className="card" style={{marginBottom:'1.2rem'}}>
+        <div className="chd"><h3>User Role & Manager Assignment</h3></div>
+        <div className="tw"><table><thead><tr><th>Name</th><th>Email</th><th>Dept</th><th>Role</th><th>Reports to</th></tr></thead>
+        <tbody>{allUsers.map(u=>(
+          <tr key={u.id}>
+            <td><div className="tdn"><Av name={u.full_name||'?'}/>{u.full_name}</div></td>
+            <td style={{fontSize:11,color:'var(--cm)'}}>{u.email}</td>
+            <td><DC dept={u.department}/></td>
+            <td>
+              <select className="fs" style={{padding:'4px 8px',fontSize:11,width:'auto'}} value={u.role||'employee'} onChange={e=>onUpdateRole(u.id,e.target.value)}>
+                {ROLES.map(r=><option key={r} value={r}>{r}</option>)}
+              </select>
+            </td>
+            <td>
+              <select className="fs" style={{padding:'4px 8px',fontSize:11,width:'auto'}} value={u.manager_id||''} onChange={e=>onUpdateManager(u.id,e.target.value||null)}>
+                <option value="">None</option>
+                {managers.filter(m=>m.id!==u.id).map(m=><option key={m.id} value={m.id}>{m.full_name}</option>)}
+              </select>
+            </td>
+          </tr>
+        ))}</tbody></table></div>
+      </div>
+
+      {/* EMAIL CONFIG */}
+      <div className="card">
+        <div className="chd"><h3>Email Notification Setup (EmailJS)</h3></div>
+        <div style={{padding:'1.2rem 1.3rem'}}>
+          <div className="al al-i" style={{marginBottom:'1rem'}}>
+            <i className="ti ti-info-circle"/>
+            <div><strong>Free email setup:</strong> Go to <strong>emailjs.com</strong> → sign up free → add Gmail/Outlook service → create a template with variables <code style={{background:'rgba(26,58,139,.1)',padding:'1px 5px',borderRadius:3}}>{'{{to_email}} {{to_name}} {{subject}} {{message}}'}</code> → paste your IDs below.</div>
+          </div>
+          <div className="fg" style={{padding:0,marginBottom:'1rem'}}>
+            <div><label className="flbl">Service ID</label><input className="fi" value={cfg.svc||''} onChange={e=>setCfg(c=>({...c,svc:e.target.value}))} placeholder="service_xxxxxxx"/></div>
+            <div><label className="flbl">Template ID</label><input className="fi" value={cfg.tpl||''} onChange={e=>setCfg(c=>({...c,tpl:e.target.value}))} placeholder="template_xxxxxxx"/></div>
+            <div style={{gridColumn:'1/-1'}}><label className="flbl">Public Key</label><input className="fi" value={cfg.key||''} onChange={e=>setCfg(c=>({...c,key:e.target.value}))} placeholder="user_xxxxxxxxxxxx"/></div>
+          </div>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <button className="btn btn-dk" onClick={saveCfg}><i className="ti ti-device-floppy"/>Save</button>
+            <button className="btn" onClick={testEmail} disabled={!cfg?.svc}><i className="ti ti-send"/>Test Email</button>
+            {saved&&<span style={{fontSize:12,color:'var(--cg)',fontWeight:500}}>✓ Saved</span>}
+            {testSt==='sending'&&<span style={{fontSize:12,color:'var(--cwc)'}}>Sending...</span>}
+            {testSt==='ok'&&<span style={{fontSize:12,color:'var(--cg)',fontWeight:500}}>✓ Sent!</span>}
+            {testSt==='fail'&&<span style={{fontSize:12,color:'var(--cdc)'}}>✗ Failed — check credentials</span>}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   POLICY
+══════════════════════════════════════════════════ */
+function Policy({ me, allUsers, balances }) {
+  const cfAlerts = allUsers.filter(u=>{const b=balances[u.id]||{};return (b.carry_forward||0)-(b.carry_used||0)>0;});
+  return <div>
+    <div className="topbar"><span className="tb-title">Leave Policy</span><span className="ybadge">V3 · Nov 2025</span></div>
+    <div className="pg">
+      <div className="sg2">
+        <div>
+          <div className="card"><div className="chd"><h3>SteelRose Legal — Leave Entitlements</h3></div>
+            <div style={{padding:'.9rem 1.3rem'}}>
+              {[['Leave year','1 April – 31 March'],['Annual leave','20 days'],['Sick leave','5 days (non-cumulative)'],['Bank holidays','8 days'],['Carry-forward','Up to 5 days'],['Carry-fwd use-by','30 June — mandatory'],['Sick >3 days','Medical certificate required'],['Study leave','5 days + 1 exam day'],['Bereavement','Up to 5 days'],['Maternity','26 weeks'],['Paternity','2 weeks'],['Notice (planned)','Min 1 month'],['Emergency','Notify within 24 hours'],['Clio matter',CLIO],['Probation','No leave (except emergency)'],['On resignation','Unused AL paid; carry-fwd not paid']].map(([k,v])=>(
+                <div key={k} className="pr"><span>{k}</span><span>{v}</span></div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="card" style={{marginBottom:'1.2rem'}}><div className="ch"><h3>Key Dates</h3></div>
+            <div style={{padding:'.9rem 1.3rem'}}>
+              {[['Year start','1 April 2026','var(--cg)'],['Carry-fwd deadline','30 June 2026','#8B1A1A'],['Year end','31 March 2027','var(--cic)'],['Days to carry expiry',`${daysLeft()} days`,'#6B1A7A']].map(([k,v,c])=>(
+                <div key={k} className="pr"><span>{k}</span><span style={{color:c}}>{v}</span></div>
+              ))}
+            </div>
+          </div>
+          <div className="card"><div className="ch"><h3>HR Contacts</h3></div>
+            <div style={{padding:'1rem 1.3rem',fontSize:13}}>
+              <div style={{marginBottom:8}}><strong>Zarif Tohtayev</strong><div style={{color:'var(--cr)',fontSize:12}}>zarif.tohtayev@steelrose.uk</div></div>
+              <div><strong>Meghana Makam</strong><div style={{color:'var(--cr)',fontSize:12}}>m.makam@steelrose.uk</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   VIEW MODAL
+══════════════════════════════════════════════════ */
+function ViewModal({ leave, me, allUsers, balances, onClose, onApprove, onReject }) {
+  if(!leave) return null;
+  const u=allUsers.find(x=>x.id===leave.user_id)||{};
+  const b=balances[leave.user_id]||{};
+  const al=(b.annual_total||AL)-(b.annual_used||0);
+  const cf=(b.carry_forward||0)-(b.carry_used||0);
+  const canDecide=(me.role==='hr'||me.role==='admin')||(me.role==='manager'&&allUsers.find(x=>x.id===leave.user_id)?.manager_id===me.id);
+  return <div className="mo" onClick={e=>e.target.className==='mo'&&onClose()}>
+    <div className="mb">
+      <div className="mh"><h3>Leave Request — {u.full_name}</h3><button className="mc" onClick={onClose}><i className="ti ti-x"/></button></div>
+      <div className="mbd">
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:'1rem',paddingBottom:'1rem',borderBottom:'1px solid #EDE5DA'}}>
+          <Av name={u.full_name||'?'} size="lg"/>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:15}}>{u.full_name}</div><div style={{fontSize:12,color:'var(--cm)',marginTop:2}}>{u.department} · {u.email}</div></div>
+          <SBadge s={leave.status}/>
+        </div>
+        {leave.is_carry&&<div className="al al-cf"><i className="ti ti-clock"/>Carry-forward days — must be taken by 30 June 2026</div>}
+        {[['Leave type',leave.leave_type],['From',leave.date_from],['To',leave.date_to],['Duration',`${leave.days} day${leave.days!==1?'s':''}`],['Reason',leave.reason||'—'],['Clio ref',leave.clio_ref||'—'],['Annual days left',`${al} days`],...(cf>0?[['Carry-fwd left',`${cf} days`]]:[])].map(([k,v])=>(
+          <div key={k} className="pr"><span>{k}</span><span>{v}</span></div>
+        ))}
+      </div>
+      {leave.status==='pending'&&canDecide&&<div className="mf">
+        <button className="btn btn-app" style={{flex:1}} onClick={()=>{onApprove(leave.id);onClose();}}><i className="ti ti-check"/>Approve</button>
+        <button className="btn btn-rej" style={{flex:1}} onClick={()=>{onReject(leave.id);onClose();}}><i className="ti ti-x"/>Reject</button>
+      </div>}
+    </div>
+  </div>;
+}
+
+/* ══════════════════════════════════════════════════
+   ROOT APP
+══════════════════════════════════════════════════ */
+function App() {
+  const [loading,  setLoading]   = useState(true);
+  const [me,       setMe]        = useState(null);
+  const [page,     setPage]      = useState('dashboard');
+  const [leaves,   setLeaves]    = useState([]);
+  const [allUsers, setAllUsers]  = useState([]);
+  const [balances, setBalances]  = useState({});
+  const [notifs,   setNotifs]    = useState([]);
+  const [viewLeave,setViewLeave] = useState(null);
+  const [emailCfg, setEmailCfg]  = useState({svc:EMAILJS_SVC,tpl:EMAILJS_TPL,key:EMAILJS_KEY});
+
+  if(NOT_CONFIGURED) return <SetupConfig/>;
+
+  /* ── initial load ── */
+  useEffect(()=>{
+    sb.auth.getSession().then(async({data:{session}})=>{
+      if(session?.user){
+        const {data:p}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+        if(p){ setMe(p); await loadData(p); }
+      }
+      setLoading(false);
+    });
+    const { data:{subscription} } = sb.auth.onAuthStateChange(async(event,session)=>{
+      if(event==='SIGNED_OUT'){setMe(null);setLeaves([]);setAllUsers([]);setBalances({});setNotifs([]);}
+    });
+    return ()=>subscription.unsubscribe();
+  },[]);
+
+  const loadData = async(profile)=>{
+    const p = profile||me;
+    if(!p) return;
+    // leaves scoped by role
+    let lq = sb.from('leaves').select('*').order('created_at',{ascending:false});
+    if(p.role==='employee') lq=lq.eq('user_id',p.id);
+    else if(p.role==='manager'){
+      const {data:team}=await sb.from('profiles').select('id').eq('manager_id',p.id);
+      const ids=[p.id,...(team||[]).map(t=>t.id)];
+      lq=lq.in('user_id',ids);
+    }
+    const {data:lv}=await lq; setLeaves(lv||[]);
+    // users
+    let uq=sb.from('profiles').select('*').order('full_name');
+    if(p.role==='manager'){ const {data:team}=await sb.from('profiles').select('*').eq('manager_id',p.id); setAllUsers([p,...(team||[])]); }
+    else if(p.role==='employee'){ setAllUsers([p]); }
+    else { const {data:us}=await uq; setAllUsers(us||[]); }
+    // balances
+    let bq=sb.from('leave_balances').select('*');
+    if(p.role==='employee') bq=bq.eq('user_id',p.id);
+    const {data:bv}=await bq;
+    const bmap={}; (bv||[]).forEach(b=>bmap[b.user_id]=b); setBalances(bmap);
+    // notifs
+    const {data:nv}=await sb.from('notifications').select('*').eq('user_id',p.id).order('created_at',{ascending:false});
+    setNotifs(nv||[]);
+    // mark read
+    await sb.from('notifications').update({is_read:true}).eq('user_id',p.id).eq('is_read',false);
+  };
+
+  // realtime subscription
+  useEffect(()=>{
+    if(!me) return;
+    const ch=sb.channel('leave-changes')
+      .on('postgres_changes',{event:'*',schema:'public',table:'leaves'},(payload)=>{ loadData(); })
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:`user_id=eq.${me.id}`},(payload)=>{ setNotifs(n=>[payload.new,...n]); })
+      .subscribe();
+    return ()=>sb.removeChannel(ch);
+  },[me]);
+
+  const unread = notifs.filter(n=>!n.is_read).length;
+
+  /* ── approve ── */
+  const handleApprove = useCallback(async(lid)=>{
+    await sb.from('leaves').update({status:'approved',approved_by:me.id,approved_at:new Date().toISOString()}).eq('id',lid);
+    const l=leaves.find(x=>x.id===lid); if(!l) return;
+    const emp=allUsers.find(u=>u.id===l.user_id);
+    await sb.from('notifications').insert({user_id:l.user_id,message:`Your ${l.leave_type} (${l.date_from}→${l.date_to}) was APPROVED by ${me.full_name}`,leave_id:lid,is_read:false});
+    if(emp) sendEmail(emp.email,emp.full_name?.split(' ')[0]||'',`Leave Approved — ${l.leave_type}`,`Your ${l.leave_type} from ${l.date_from} to ${l.date_to} (${l.days} day${l.days!==1?'s':''}) has been APPROVED by ${me.full_name}.\n\nPlease update Clio under ${CLIO} and the shared leave calendar.`);
+    // update balance
+    if(l.leave_type==='Annual Leave'&&!l.is_carry) await sb.from('leave_balances').upsert({user_id:l.user_id,annual_used:((balances[l.user_id]?.annual_used||0)+l.days)},{onConflict:'user_id'});
+    else if(l.leave_type==='Sick Leave') await sb.from('leave_balances').upsert({user_id:l.user_id,sick_used:((balances[l.user_id]?.sick_used||0)+l.days)},{onConflict:'user_id'});
+    else if(l.is_carry) await sb.from('leave_balances').upsert({user_id:l.user_id,carry_used:((balances[l.user_id]?.carry_used||0)+l.days)},{onConflict:'user_id'});
+    await loadData();
+  },[leaves,allUsers,me,balances]);
+
+  /* ── reject ── */
+  const handleReject = useCallback(async(lid)=>{
+    await sb.from('leaves').update({status:'rejected',approved_by:me.id,approved_at:new Date().toISOString()}).eq('id',lid);
+    const l=leaves.find(x=>x.id===lid); if(!l) return;
+    const emp=allUsers.find(u=>u.id===l.user_id);
+    await sb.from('notifications').insert({user_id:l.user_id,message:`Your ${l.leave_type} (${l.date_from}→${l.date_to}) was REJECTED by ${me.full_name}`,leave_id:lid,is_read:false});
+    if(emp) sendEmail(emp.email,emp.full_name?.split(' ')[0]||'',`Leave Declined — ${l.leave_type}`,`Your ${l.leave_type} from ${l.date_from} to ${l.date_to} has been declined by ${me.full_name}.\n\nPlease contact your manager or HR with any questions.`);
+    await loadData();
+  },[leaves,allUsers,me]);
+
+  /* ── escalate to Partner ── */
+  const handleEscalate = useCallback(async(lid, ceo)=>{
+    // mark leave as escalated in DB
+    await sb.from('leaves').update({escalated_to_ceo:true}).eq('id',lid);
+    const l=leaves.find(x=>x.id===lid); if(!l) return;
+    const emp=allUsers.find(u=>u.id===l.user_id);
+    // notify Partner
+    await sb.from('notifications').insert({
+      user_id:ceo.id,
+      message:`[ESCALATED TO PARTNER] ${me.full_name} has referred ${emp?.full_name||''}'s ${l.leave_type} (${l.date_from} → ${l.date_to}) to you for Partner approval.`,
+      leave_id:lid, is_read:false
+    });
+    // notify employee
+    await sb.from('notifications').insert({
+      user_id:l.user_id,
+      message:`Your ${l.leave_type} request has been escalated to ${ceo.full_name} (Partner) for approval by ${me.full_name}.`,
+      leave_id:lid, is_read:false
+    });
+    // email Partner
+    if(ceo) sendEmail(
+      ceo.email, ceo.full_name?.split(' ')[0]||'Zu',
+      `[Partner Approval Required] Leave Request — ${emp?.full_name}`,
+      `Dear ${ceo.full_name?.split(' ')[0]||'Zu'},
+
+${me.full_name} has escalated a leave request to you for Partner approval:
+
+Employee: ${emp?.full_name}
+Department: ${emp?.department}
+Leave type: ${l.leave_type}
+From: ${l.date_from}
+To: ${l.date_to}
+Days: ${l.days}
+Reason: ${l.reason||'—'}
+
+Please log in to approve or reject this request.
+
+Regards,
+SteelRose Leave System`
+    );
+    await loadData();
+  },[leaves,allUsers,me]);
+
+  /* ── submit ── */
+  const handleSubmit = useCallback(async(data)=>{
+    const {data:lv}=await sb.from('leaves').insert([{user_id:me.id,...data,status:'pending'}]).select().single();
+    if(me.manager_id){
+      const mgr=allUsers.find(u=>u.id===me.manager_id);
+      await sb.from('notifications').insert({user_id:me.manager_id,message:`${me.full_name} requested ${data.leave_type} (${data.date_from} → ${data.date_to}) — ${data.days} day${data.days!==1?'s':''}`,leave_id:lv?.id,is_read:false});
+      if(mgr) sendEmail(mgr.email,mgr.full_name?.split(' ')[0]||'',`New Leave Request — ${me.full_name}`,`${me.full_name} has submitted a leave request:\n\nType: ${data.leave_type}\nFrom: ${data.date_from}\nTo: ${data.date_to}\nDays: ${data.days}\nReason: ${data.reason}\n\nPlease log in to approve or reject.`);
+    }
+    await loadData();
+  },[me,allUsers]);
+
+  /* ── update role (admin) ── */
+  const handleUpdateRole = async(uid,role)=>{
+    await sb.from('profiles').update({role}).eq('id',uid);
+    setAllUsers(us=>us.map(u=>u.id===uid?{...u,role}:u));
+  };
+  const handleUpdateManager = async(uid,mid)=>{
+    await sb.from('profiles').update({manager_id:mid}).eq('id',uid);
+    setAllUsers(us=>us.map(u=>u.id===uid?{...u,manager_id:mid}:u));
+  };
+
+  const setPageNav=(p)=>{ setPage(p); if(p==='notifications') sb.from('notifications').update({is_read:true}).eq('user_id',me.id); };
+
+  if(loading) return <div className="loading"><div className="spin"/><div style={{fontFamily:'var(--fd)',fontSize:18,color:'var(--cr3)'}}>SteelRose Legal</div><div style={{fontSize:13,color:'var(--cm)'}}>Loading your data...</div></div>;
+  if(!me) return <Auth onAuth={async(p)=>{ setMe(p); setLoading(true); await loadData(p); setLoading(false); }}/>;
+
+  const cp = {me,allUsers,balances,leaves,notifs};
+  return <div className="shell">
+    <Sidebar me={me} page={page} setPage={setPageNav} unread={unread} onLogout={async()=>{ await sb.auth.signOut(); setMe(null); }}/>
+    <div className="main">
+      {me.role==='pending'&&<div className="setup-banner"><i className="ti ti-clock"/>Your account is pending HR activation. You can view the app but cannot submit leave requests yet.</div>}
+      {page==='dashboard'   &&<Dashboard {...cp} setPage={setPageNav} onApprove={handleApprove} onReject={handleReject}/>}
+      {page==='my-leaves'   &&<MyLeaves {...cp} setPage={setPageNav}/>}
+      {page==='apply'       &&me.role!=='pending'&&<ApplyLeave me={me} bal={balances[me.id]} onSubmit={handleSubmit}/>}
+      {page==='approvals'   &&<Approvals {...cp} onApprove={handleApprove} onReject={handleReject} onView={setViewLeave} onEscalate={handleEscalate}/>}
+      {page==='all-leaves'  &&<AllLeaves {...cp} onApprove={handleApprove} onReject={handleReject} onView={setViewLeave}/>}
+      {page==='staff'       &&<Staff {...cp}/>}
+      {page==='calendar'    &&<CalPage me={me} leaves={leaves} allUsers={allUsers}/>}
+      {page==='notifications'&&<Notifs {...cp} onApprove={handleApprove} onReject={handleReject}/>}
+      {page==='admin-panel' &&<AdminPanel me={me} allUsers={allUsers} onUpdateRole={handleUpdateRole} onUpdateManager={handleUpdateManager} emailCfg={emailCfg} setEmailCfg={setEmailCfg}/>}
+      {page==='policy'      &&<Policy me={me} allUsers={allUsers} balances={balances}/>}
+    </div>
+    {viewLeave&&<ViewModal leave={viewLeave} me={me} allUsers={allUsers} balances={balances} onClose={()=>setViewLeave(null)} onApprove={handleApprove} onReject={handleReject}/>}
+  </div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
